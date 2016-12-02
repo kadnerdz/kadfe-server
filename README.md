@@ -1,20 +1,15 @@
-# Backend Code For Kadfe!
+# Code for Kadfe!
 
 ## Endpoints
 
 ### /brewed
-
-*"Coffee is made"*
+"Coffee is made"
 POST request for when coffee has been made.
 
-
-
 ### /claimed
-*"User claims coffee"*
+"User claims coffee"
 PUT request for when coffee has been claimed.
 
-
-
 ### /status
-*"???"*
+"???"
 GET request to check the coffee status.

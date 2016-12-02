@@ -1,21 +1,20 @@
-# Backend code for Kadfe!
+# Backend Code For Kadfe!
 
 ## Endpoints
-
+---
 
 ### /brewed
-"Coffee is made"
 
+*"Coffee is made"*
 POST request for when coffee has been made.
 
 
-### /claimed
-"User claims coffee"
 
+### /claimed
+*"User claims coffee"*
 PUT request for when coffee has been claimed.
 
 
 ### /status
 "???"
 GET request to check the coffee status.
->>>>>>> removing rpio dependecy, adding json-node-db, adding saving state to db

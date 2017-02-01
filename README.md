@@ -1,7 +1,6 @@
 # Backend Code For Kadfe!
 
 ## Endpoints
----
 
 ### /brewed
 

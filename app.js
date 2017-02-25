@@ -24,7 +24,3 @@ app.get('/status', function (req, res) {
 app.listen(3000, function () {
   console.log('Welcome to the Kadfe Backend!');
 });
-
-app.listen(3000, function () {
-  console.log('Welcome to the Kadfe Backend!');
-});

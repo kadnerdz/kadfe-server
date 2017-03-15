@@ -1,20 +1,24 @@
 # Backend Code For Kadfe!
 
 ## Endpoints
----
 
-### /brewed
+### /coffee
++ `GET` return current coffee status
+  Status Code: 200
+  Body: `{ 'status': 'coffee_status' }` where `'coffee_status'` is one of: `available`, `unavailable`
 
-*"Coffee is made"*
-POST request for when coffee has been made.
++ `POST` make new coffee
+  + In case of coffee being unavailable:
+    Status Code: 200
+    Body: `{ 'status': 'available' }`
+  + In case of coffee being already available:
+    Status Code: 409
+    Body: `{ 'message': 'cofee already available' }`
 
-
-
-### /claimed
-*"User claims coffee"*
-PUT request for when coffee has been claimed.
-
-
-### /status
-"???"
-GET request to check the coffee status.
++ `DELETE` remove a coffee claim
+  + In case of coffee being unavailable:
+    Status Code: 409
+    Body: `{ 'message': 'cofee already unavailable' }`
+  + In case of coffee being already available:
+    Status Code: 200
+    Body: `{ 'status': 'available' }`

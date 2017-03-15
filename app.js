@@ -53,17 +53,11 @@ app.get('/coffee', (req, resp) => {
 app.post('/coffee', (req, resp) => {
   getCurrentStatus().
     then(currentStatus => {
-      if (currentStatus.status === UNAVAILABLE) {
-        setStatus(AVAILABLE).
-          then(statusAfterUpdate => {
-            resp.status(200)
-            resp.send({ status: statusAfterUpdate.status })
-          })
-      }
-      else {
-        resp.status(409)
-        resp.send({ message: 'coffee already available' })
-      }
+      setStatus(AVAILABLE).
+        then(statusAfterUpdate => {
+          resp.status(200)
+          resp.send({ status: statusAfterUpdate.status })
+        })
     })
 })
 

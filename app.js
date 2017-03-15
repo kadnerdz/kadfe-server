@@ -24,16 +24,16 @@ const getCurrentStatus = () => new Promise((resolve, error) => {
   return CoffeeStatus.find().sort({ _id: 'desc' }).exec((err, docs) => {
     if (err) return error(err)
     else return resolve(docs[0])
-  })
-})
+  }).catch(console.log)
+}).catch(console.log)
 
 const setStatus = status => new Promise((resolve, error) => {
-  return new CoffeeStatus({ status: status }).
-    save((err, status) => { 
+  return (new CoffeeStatus({ status })).
+    save((err, newStatus) => {
       if (err) return error(err)
-      else return resolve(status)
-    })
-})
+      else return resolve(newStatus)
+    }).catch(console.log)
+}).catch(console.log)
 
 const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
 
@@ -43,23 +43,23 @@ app.get('/coffee', (req, resp) => {
   getCurrentStatus().
     then(currentStatus => {
       resp.status(200)
-      resp.write({ status: currentStatus })
+      resp.send({ status: currentStatus.status })
     })
 })
 
 app.post('/coffee', (req, resp) => {
   getCurrentStatus().
     then(currentStatus => {
-      if (currentStatus == UNAVAILABLE) {
-        setCurrentStatus(AVAILABLE).
+      if (currentStatus.status === UNAVAILABLE) {
+        setStatus(AVAILABLE).
           then(statusAfterUpdate => {
             resp.status(200)
-            resp.write({ status: statusAfterUpdate })
+            resp.send({ status: statusAfterUpdate.status })
           })
       }
       else {
         resp.status(409)
-        resp.write({ message: 'coffee already available' })
+        resp.send({ message: 'coffee already available' })
       }
     })
 })
@@ -67,16 +67,16 @@ app.post('/coffee', (req, resp) => {
 app.delete('/coffee', (req, resp) => {
   getCurrentStatus().
     then(currentStatus => {
-      if (currentStatus == AVAILABLE) {
-        setCurrentStatus(UNAVAILABLE).
+      if (currentStatus.status == AVAILABLE) {
+        setStatus(UNAVAILABLE).
           then(statusAfterUpdate => {
             resp.status(200)
-            resp.write({ status: statusAfterUpdate })
+            resp.send({ status: statusAfterUpdate.status })
           })
       }
       else {
         resp.status(409)
-        resp.write({ message: 'coffee already unavailable' })
+        resp.send({ message: 'coffee already unavailable' })
       }
     })
 })

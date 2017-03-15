@@ -51,13 +51,10 @@ app.get('/coffee', (req, resp) => {
 })
 
 app.post('/coffee', (req, resp) => {
-  getCurrentStatus().
-    then(currentStatus => {
-      setStatus(AVAILABLE).
-        then(statusAfterUpdate => {
-          resp.status(200)
-          resp.send({ status: statusAfterUpdate.status })
-        })
+  setStatus(AVAILABLE).
+    then(statusAfterUpdate => {
+      resp.status(200)
+      resp.send({ status: statusAfterUpdate.status })
     })
 })
 

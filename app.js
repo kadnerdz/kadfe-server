@@ -13,7 +13,7 @@ if (!MONGO_HOST || !MONGO_USER || !MONGO_PORT || !MONGO_PASS|| !COFFEE_DB) {
   console.log('Please populate both MONGO_HOST, MONGO_USER, MONGO_PASS, MONGO_PORT and COFFEE_DB environment variables')
   process.exit()
 }
-const DB_URL = `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${COFFEE_DB`
+const DB_URL = `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${COFFEE_DB}`
 
 const [ AVAILABLE, UNAVAILABLE ] = ['available', 'unavailable']
 

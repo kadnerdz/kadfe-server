@@ -1,26 +1,91 @@
-var JsonDB = require('node-json-db');
-var db = new JsonDB("db", true, false);
-var express = require('express');
-var app = express();
+// require('dotenv').configure()
+const mongoose = require('mongoose')
+const express = require('express')
+const app = express()
 
-app.post('/brewed', function (req, res) {
-  db.push("/state1","true");
-  db.reload();
-  res.send('Coffee is made!');
-});
+const MONGO_HOST = process.env.MONGO_HOST
+const COFFEE_DB = process.env.COFFEE_DB
 
-app.put('/claimed', function (req, res) {
-  if(db.getData("/state1") == "true"){
-    db.push("/state1","false");
-    db.reload();
-  }
-  res.send(db.getData("/state1"));
-});
+if (!MONGO_HOST || !COFFEE_DB) {
+  console.log('Please populate both MONGO_HOST and COFFEE_DB environment variables')
+  process.exit()
+}
+const DB_URL = `mongodb://${MONGO_HOST}/${COFFEE_DB}`
 
-app.get('/status', function (req, res) {
-  res.send(db.getData("/state1"));
-});
+const [ AVAILABLE, UNAVAILABLE ] = ['available', 'unavailable']
 
-app.listen(3000, function () {
-  console.log('Welcome to the Kadfe Backend!');
-});
+const Schema = mongoose.Schema
+
+const coffeeStatusSchema = new Schema({
+  status: String
+})
+
+const getCurrentStatus = () => new Promise((resolve, error) => {
+  return CoffeeStatus.find().sort({ _id: 'desc' }).exec((err, docs) => {
+    if (err) return error(err)
+    else return resolve(docs[0])
+  })
+})
+
+const setStatus = status => new Promise((resolve, error) => {
+  return new CoffeeStatus({ status: status }).
+    save((err, status) => { 
+      if (err) return error(err)
+      else return resolve(status)
+    })
+})
+
+const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
+
+mongoose.connect(DB_URL)
+
+app.get('/coffee', (req, resp) => {
+  getCurrentStatus().
+    then(currentStatus => {
+      resp.status(200)
+      resp.write({ status: currentStatus })
+    })
+})
+
+app.post('/coffee', (req, resp) => {
+  getCurrentStatus().
+    then(currentStatus => {
+      if (currentStatus == UNAVAILABLE) {
+        setCurrentStatus(AVAILABLE).
+          then(statusAfterUpdate => {
+            resp.status(200)
+            resp.write({ status: statusAfterUpdate })
+          })
+      }
+      else {
+        resp.status(409)
+        resp.write({ message: 'coffee already available' })
+      }
+    })
+})
+
+app.delete('/coffee', (req, resp) => {
+  getCurrentStatus().
+    then(currentStatus => {
+      if (currentStatus == AVAILABLE) {
+        setCurrentStatus(UNAVAILABLE).
+          then(statusAfterUpdate => {
+            resp.status(200)
+            resp.write({ status: statusAfterUpdate })
+          })
+      }
+      else {
+        resp.status(409)
+        resp.write({ message: 'coffee already unavailable' })
+      }
+    })
+})
+
+app.listen(process.env.PORT || 3000, () => {
+  getCurrentStatus().then(status => {
+    if (typeof status === 'undefined')
+      setStatus(UNAVAILABLE).
+        then(status => console.log('set default status to unavailable'))
+    console.log('listening')
+  })
+}).on('error', console.log)

@@ -9,16 +9,16 @@
 
 + `POST` make new coffee
   + In case of coffee being unavailable:
-    Status Code: 200
-    Body: `{ 'status': 'available' }`
+      + Status Code: 200
+      + Body: `{ 'status': 'available' }`
   + In case of coffee being already available:
-    Status Code: 409
-    Body: `{ 'message': 'cofee already available' }`
+      + Status Code: 409
+      + Body: `{ 'message': 'cofee already available' }`
 
 + `DELETE` remove a coffee claim
   + In case of coffee being unavailable:
-    Status Code: 409
-    Body: `{ 'message': 'cofee already unavailable' }`
+      + Status Code: 409
+      + Body: `{ 'message': 'cofee already unavailable' }`
   + In case of coffee being already available:
-    Status Code: 200
-    Body: `{ 'status': 'available' }`
+      + Status Code: 200
+      + Body: `{ 'status': 'available' }`

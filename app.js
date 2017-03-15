@@ -4,13 +4,16 @@ const express = require('express')
 const app = express()
 
 const MONGO_HOST = process.env.MONGO_HOST
+const MONGO_USER = process.env.MONGO_USER
+const MONGO_PASS = process.env.MONGO_PASS
+const MONGO_PORT = process.env.MONGO_PORT
 const COFFEE_DB = process.env.COFFEE_DB
 
-if (!MONGO_HOST || !COFFEE_DB) {
-  console.log('Please populate both MONGO_HOST and COFFEE_DB environment variables')
+if (!MONGO_HOST || !MONGO_USER || !MONGO_PORT || !MONGO_PASS|| !COFFEE_DB) {
+  console.log('Please populate both MONGO_HOST, MONGO_USER, MONGO_PASS, MONGO_PORT and COFFEE_DB environment variables')
   process.exit()
 }
-const DB_URL = `mongodb://${MONGO_HOST}/${COFFEE_DB}`
+const DB_URL = `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${COFFEE_DB`
 
 const [ AVAILABLE, UNAVAILABLE ] = ['available', 'unavailable']
 

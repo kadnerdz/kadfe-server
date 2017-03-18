@@ -4,7 +4,7 @@ const express = require('express')
 const WebSocket = require('ws')
 
 const app = express()
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ app });
 
 const MONGO_HOST = process.env.MONGO_HOST
 const MONGO_USER = process.env.MONGO_USER

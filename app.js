@@ -2,11 +2,14 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const http = require('http')
-const WebSocket = require('ws')
+// const WebSocket = require('ws')
 
 const app = express()
-const server = http.createServer(app)
-const wss = new WebSocket.Server({ server: server })
+// const server = http.createServer(app)
+// const wss = new WebSocket.Server({
+//   server: server,
+//   perMessageDeflate: false
+// })
 
 const MONGO_HOST = process.env.MONGO_HOST
 const MONGO_USER = process.env.MONGO_USER
@@ -60,7 +63,6 @@ app.post('/coffee', (req, resp) => {
     then(statusAfterUpdate => {
       resp.status(200)
       resp.send({ status: statusAfterUpdate.status })
-      wss.send('available')
     })
 })
 
@@ -81,9 +83,9 @@ app.delete('/coffee', (req, resp) => {
     })
 })
 
-wss.on('connection', (ws) => {
-  console.log('client connected')
-})
+// wss.on('connection', (ws) => {
+//   console.log('client connected')
+// })
 
 app.listen(process.env.PORT || 3000, () => {
   getCurrentStatus().then(status => {

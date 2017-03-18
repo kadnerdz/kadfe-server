@@ -1,10 +1,12 @@
 // require('dotenv').configure()
 const mongoose = require('mongoose')
 const express = require('express')
+const http = require('http')
 const WebSocket = require('ws')
 
 const app = express()
-const wss = new WebSocket.Server({ port: process.env.PORT })
+const server = http.createServer(app)
+const wss = new WebSocket.Server({ server: server })
 
 const MONGO_HOST = process.env.MONGO_HOST
 const MONGO_USER = process.env.MONGO_USER

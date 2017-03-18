@@ -1,10 +1,10 @@
 // require('dotenv').configure()
 const mongoose = require('mongoose')
 const express = require('express')
-//const wss = require('ws')
+const wss = require('ws')
 
 const app = express()
-//const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ server });
 
 const MONGO_HOST = process.env.MONGO_HOST
 const MONGO_USER = process.env.MONGO_USER
@@ -58,7 +58,7 @@ app.post('/coffee', (req, resp) => {
     then(statusAfterUpdate => {
       resp.status(200)
       resp.send({ status: statusAfterUpdate.status })
-      //wss.send('available')
+      wss.send('available')
     })
 })
 
@@ -79,9 +79,9 @@ app.delete('/coffee', (req, resp) => {
     })
 })
 
-/*wss.on('connection', (ws) => {
-  console.log('client connected!');
-})*/
+wss.on('connection', (ws) => {
+  console.log('client connected')
+})
 
 app.listen(process.env.PORT || 3000, () => {
   getCurrentStatus().then(status => {

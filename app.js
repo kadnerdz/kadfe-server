@@ -1,7 +1,7 @@
 // require('dotenv').configure()
 const mongoose = require('mongoose')
 const express = require('express')
-const wss = require('ws')
+const WebSocket = require('ws')
 
 const app = express()
 const wss = new WebSocket.Server({ server });

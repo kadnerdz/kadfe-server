@@ -1,16 +1,9 @@
 // require('dotenv').configure()
 const mongoose = require('mongoose')
 const express = require('express')
-const http = require('http')
 const WebSocket = require('ws')
 
 const app = express()
-const server = http.createServer(app)
-const wss = new WebSocket.Server({
-  server: server,
-  clientTracking: true,
-  perMessageDeflate: false
-})
 
 const MONGO_HOST = process.env.MONGO_HOST
 const MONGO_USER = process.env.MONGO_USER
@@ -94,8 +87,24 @@ app.delete('/coffee', (req, resp) => {
     })
 })
 
+app.listen(process.env.PORT || 3000, () => {
+  getCurrentStatus().then(status => {
+    if (typeof status === 'undefined')
+      setStatus(UNAVAILABLE).
+        then(status => console.log('set default status to unavailable'))
+    console.log('listening')
+  })
+}).on('error', console.log)
+
+const wss = new WebSocket.Server({
+  server: app,
+  clientTracking: true,
+  perMessageDeflate: false
+})
+
 wss.on('connection', ws => {
   console.log('client connected')
+  ws.send(getCurrentStatus)
   ws.on('message', message => {
     console.log(message);
   })
@@ -106,12 +115,3 @@ wss.on('connection', ws => {
     console.log('client error')
   })
 })
-
-app.listen(process.env.PORT || 3000, () => {
-  getCurrentStatus().then(status => {
-    if (typeof status === 'undefined')
-      setStatus(UNAVAILABLE).
-        then(status => console.log('set default status to unavailable'))
-    console.log('listening')
-  })
-}).on('error', console.log)

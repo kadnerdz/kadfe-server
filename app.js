@@ -90,7 +90,6 @@ app.listen(process.env.PORT || 3000, () => {
 
 const wss = new WebSocket.Server({
   server: app,
-  port: 80,
   clientTracking: true,
   perMessageDeflate: false
 })

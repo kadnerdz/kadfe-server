@@ -2,14 +2,15 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const http = require('http')
-// const WebSocket = require('ws')
+const WebSocket = require('ws')
 
 const app = express()
-// const server = http.createServer(app)
-// const wss = new WebSocket.Server({
-//   server: server,
-//   perMessageDeflate: false
-// })
+const server = http.createServer(app)
+const wss = new WebSocket.Server({
+  server: server,
+  clientTracking: true,
+  perMessageDeflate: false
+})
 
 const MONGO_HOST = process.env.MONGO_HOST
 const MONGO_USER = process.env.MONGO_USER
@@ -48,6 +49,14 @@ const setStatus = status => new Promise((resolve, error) => {
 
 const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
 
+wss.broadcast = message => {
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+};
+
 mongoose.connect(DB_URL)
 
 app.get('/coffee', (req, resp) => {
@@ -63,6 +72,7 @@ app.post('/coffee', (req, resp) => {
     then(statusAfterUpdate => {
       resp.status(200)
       resp.send({ status: statusAfterUpdate.status })
+      wss.broadcast(statusAfterUpdate.status)
     })
 })
 
@@ -74,6 +84,7 @@ app.delete('/coffee', (req, resp) => {
           then(statusAfterUpdate => {
             resp.status(200)
             resp.send({ status: statusAfterUpdate.status })
+            wss.broadcast(statusAfterUpdate.status)
           })
       }
       else {
@@ -83,9 +94,18 @@ app.delete('/coffee', (req, resp) => {
     })
 })
 
-// wss.on('connection', (ws) => {
-//   console.log('client connected')
-// })
+wss.on('connection', ws => {
+  console.log('client connected')
+  ws.on('message', message => {
+    console.log(message);
+  })
+  ws.on('close', client => {
+    console.log('client disconnected')
+  })
+  ws.on('error', client => {
+    console.log('client error')
+  })
+})
 
 app.listen(process.env.PORT || 3000, () => {
   getCurrentStatus().then(status => {

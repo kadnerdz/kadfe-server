@@ -44,10 +44,6 @@ const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
 
 mongoose.connect(DB_URL)
 
-app.use((req, resp) => {
-  res.send({message: "hey"})
-})
-
 app.get('/coffee', (req, resp) => {
   getCurrentStatus().
     then(currentStatus => {

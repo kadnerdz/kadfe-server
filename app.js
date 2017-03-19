@@ -95,6 +95,8 @@ const wss = new WebSocket.Server({
   perMessageDeflate: false
 })
 
+console.log(wss);
+
 wss.on('connection', ws => {
   console.log('client connected')
   ws.send(getCurrentStatus)

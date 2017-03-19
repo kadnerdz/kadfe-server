@@ -42,14 +42,6 @@ const setStatus = status => new Promise((resolve, error) => {
 
 const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
 
-wss.broadcast = message => {
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
-    }
-  });
-};
-
 mongoose.connect(DB_URL)
 
 app.get('/coffee', (req, resp) => {
@@ -115,3 +107,11 @@ wss.on('connection', ws => {
     console.log('client error')
   })
 })
+
+wss.broadcast = message => {
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+};

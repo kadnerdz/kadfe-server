@@ -43,6 +43,7 @@ const setStatus = status => new Promise((resolve, error) => {
 const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
 
 mongoose.connect(DB_URL)
+app.get('/', (req, resp) => { resp.status(200); resp.send('hi') })
 
 app.get('/coffee', (req, resp) => {
   getCurrentStatus().

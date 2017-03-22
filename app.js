@@ -1,6 +1,7 @@
 // require('dotenv').configure()
 const mongoose = require('mongoose')
 const express = require('express')
+const http = require('http')
 const WebSocket = require('ws')
 
 const app = express()
@@ -43,6 +44,7 @@ const setStatus = status => new Promise((resolve, error) => {
 const CoffeeStatus = mongoose.model('CoffeeStatus', coffeeStatusSchema)
 
 mongoose.connect(DB_URL)
+
 app.get('/', (req, resp) => { resp.status(200); resp.send('hi') })
 
 app.get('/coffee', (req, resp) => {
@@ -89,7 +91,9 @@ app.listen(process.env.PORT || 3000, () => {
   })
 }).on('error', console.log)
 
-const wss = new WebSocket.Server({ server: app })
+const server = http.createServer(app)
+
+const wss = new WebSocket.Server({ server })
 
 wss.on('connection', ws => {
   console.log('client connected')

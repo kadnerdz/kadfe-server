@@ -117,7 +117,6 @@ wss.broadcast = message => {
   console.log('trying to broadcast: ' + message)
   console.log(wss.clients + '<-- these are the connected clients')
   wss.clients.forEach(client => {
-    console.log(client)
     console.log(client.readyState)
     if (client.readyState === WebSocket.OPEN) {
       client.send(message)

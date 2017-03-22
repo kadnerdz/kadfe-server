@@ -110,8 +110,6 @@ wss.on('connection', ws => {
     console.log('client disconnected')
   }).on('error', client => {
     console.log('client error')
-  }).on('pong', () => {
-    console.log('ponged')
   })
 })
 
@@ -119,7 +117,7 @@ setInterval(() => {
   wss.clients.forEach((client) => {
     client.ping()
   });
-}, 5000)
+}, 45000)
 
 wss.broadcast = message => {
   console.log('trying to broadcast: ' + message)

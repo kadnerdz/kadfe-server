@@ -6,12 +6,16 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
-    "repl": "node"
+    "repl": "node",
+    "test": "mocha test/*"
   },
   "dependencies": {
+    "chai": "^3.5.0",
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
+    "mocha": "^3.2.0",
     "mongoose": "^4.9.0",
     "ws": "^2.2.1"
-  }
+  },
+  "devDependencies": {}
 }

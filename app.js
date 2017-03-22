@@ -98,7 +98,7 @@ const wss = new WebSocket.Server({ server })
 wss.on('connection', ws => {
   console.log('client connected')
   getCurrentStatus().
-    then(status => ws.send(status)).
+    then(status => ws.send(JSON.stringify(status.status))).
     catch(err => ws.send(err))
   ws.on('message', message => {
     console.log(message)

@@ -82,7 +82,9 @@ app.delete('/coffee', (req, resp) => {
     })
 })
 
-app.listen(process.env.PORT || 3000, () => {
+const server = http.createServer(app)
+
+server.listen(process.env.PORT || 3000, () => {
   getCurrentStatus().then(status => {
     if (typeof status === 'undefined')
       setStatus(UNAVAILABLE).
@@ -90,8 +92,6 @@ app.listen(process.env.PORT || 3000, () => {
     console.log('listening')
   })
 }).on('error', console.log)
-
-const server = http.createServer(app)
 
 const wss = new WebSocket.Server({ server })
 

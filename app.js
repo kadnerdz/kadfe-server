@@ -88,13 +88,11 @@ app.listen(process.env.PORT || 3000, () => {
   })
 }).on('error', console.log)
 
-console.log(process.env)
-const wss = new WebSocket.Server({ server: app,
-                                  port: 8081 })
+const wss = new WebSocket.Server({ server: app })
 
 wss.on('connection', ws => {
   console.log('client connected')
-  ws.send(getCurrentStatus)
+  getCurrentStatus().then(status => ws.send(status))
   ws.on('message', message => {
     console.log(message)
   })
@@ -106,10 +104,10 @@ wss.on('connection', ws => {
   })
 })
 
-wss.broadcast = message => {
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message)
-    }
-  })
-}
+// wss.broadcast = message => {
+//   wss.clients.forEach(client => {
+//     if (client.readyState === WebSocket.OPEN) {
+//       client.send(message)
+//     }
+//   })
+// }

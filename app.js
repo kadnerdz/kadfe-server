@@ -88,15 +88,14 @@ app.listen(process.env.PORT || 3000, () => {
   })
 }).on('error', console.log)
 
-const wss = new WebSocket.Server({ server: app })
-
-console.log(wss);
+const wss = new WebSocket.Server({ server: app,
+                                  port: 8081 })
 
 wss.on('connection', ws => {
   console.log('client connected')
   ws.send(getCurrentStatus)
   ws.on('message', message => {
-    console.log(message);
+    console.log(message)
   })
   ws.on('close', client => {
     console.log('client disconnected')
@@ -109,7 +108,7 @@ wss.on('connection', ws => {
 wss.broadcast = message => {
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
+      client.send(message)
     }
-  });
-};
+  })
+}

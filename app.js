@@ -88,6 +88,7 @@ app.listen(process.env.PORT || 3000, () => {
   })
 }).on('error', console.log)
 
+console.log(process.env)
 const wss = new WebSocket.Server({ server: app,
                                   port: 8081 })
 

@@ -93,12 +93,16 @@ server.listen(process.env.PORT || 3000, () => {
   })
 }).on('error', console.log)
 
-const wss = new WebSocket.Server({ server })
+const wss = new WebSocket.Server({
+  server,
+  clientTracking: true,
+  perMessageDeflate: false
+})
 
 wss.on('connection', ws => {
   console.log('client connected')
   getCurrentStatus().
-    then(status => ws.send(JSON.stringify(status.status))).
+    then(status => ws.send(status.status)).
     catch(err => ws.send(err))
   ws.on('message', message => {
     console.log(message)

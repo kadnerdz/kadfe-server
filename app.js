@@ -109,10 +109,10 @@ wss.on('connection', ws => {
   })
 })
 
-// wss.broadcast = message => {
-//   wss.clients.forEach(client => {
-//     if (client.readyState === WebSocket.OPEN) {
-//       client.send(message)
-//     }
-//   })
-// }
+wss.broadcast = message => {
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message)
+    }
+  })
+}

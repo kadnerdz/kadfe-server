@@ -88,7 +88,7 @@ app.listen(process.env.PORT || 3000, () => {
   })
 }).on('error', console.log)
 
-const wss = new WebSocket.Server({ app })
+/*const wss = new WebSocket.Server({ app })
 
 console.log(wss);
 
@@ -113,3 +113,4 @@ wss.broadcast = message => {
     }
   });
 };
+*/

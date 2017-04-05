@@ -119,19 +119,6 @@ setInterval(() => {
   });
 }, 45 * 1000)
 
-setInterval(() => {
-  var options = {
-    hostname: 'kadfe-bot.herokuapp.com'
-    protocol: 'https:'
-  }
-
-  var req = http.request(options, (res) => {});
-
-  req.on('error', (e) => {
-    console.log(`problem with request: ${e.message}`);
-  }).end();
-}, 60 * 1000)
-
 wss.broadcast = message => {
   console.log('trying to broadcast: ' + message)
   wss.clients.forEach(client => {
